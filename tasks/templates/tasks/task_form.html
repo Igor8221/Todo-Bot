@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if task %}Редактировать{% else %}Создать{% endif %} задачу</title>
+</head>
+<body>
+    <h1>{% if task %}Редактировать{% else %}Создать{% endif %} задачу</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="title">Название:</label>
+        <input type="text" id="title" name="title" value="{{ task.title|default:'' }}" required><br>
+        
+        <label for="description">Описание:</label>
+        <textarea id="description" name="description">{{ task.description|default:'' }}</textarea><br>
+        
+        <label for="deadline">Дедлайн:</label>
+        <input type="datetime-local" id="deadline" name="deadline" value="{{ task.deadline|date:'Y-m-d\\TH:i' }}"><br>
+        
+        {% if task %}
+        <label for="status">Выполнено:</label>
+        <input type="checkbox" id="status" name="status" {% if task.status %}checked{% endif %}><br>
+        {% endif %}
+        
+        <button type="submit">{% if task %}Сохранить{% else %}Создать{% endif %}</button>
+    </form>
+    <a href="{% url 'task_list' %}">Назад к списку</a>
+</body>
+</html>
